@@ -1,8 +1,6 @@
-FROM alpine:latest
+FROM nginx:latest
 
 LABEL maintainer="adrian@cantrill.io" 
-
-RUN apk --update add nginx
 
 COPY 2048 /usr/share/nginx/html
 
