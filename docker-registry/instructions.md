@@ -24,7 +24,7 @@ Verify the image is created using the command below, and note down the image ID
 
 To push this image to Docker Hub we need to tag it with our hub username and repo name.  
 
-```docker tag IMAGEID YOUR_USER/containerofcats:latest```
+```docker tag IMAGEID YOUR_USER/newcontainerofcats:latest```
 
 Then we can push this image to dockerhub
 
