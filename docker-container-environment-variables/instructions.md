@@ -39,7 +39,7 @@ run the command below to show the metadata for the running container for mariaDB
 
 look for "IPAddress": "XXXXXXXXXX", this is the internal docker network IP that the DB container is running on. note this down as `DB_IP`  
 
-open https://localhost:8081 to access phpmyadmin
+open http://localhost:8081 to access phpmyadmin
 enter `DB_IP` for server  
 enter `root` for username  
 enter `somewordpress` for password  
