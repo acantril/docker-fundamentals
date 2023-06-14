@@ -15,17 +15,17 @@ first we need to pull down the mariaDB image.
 lets inspect it and review all metadata.  
 ```docker inspect mariadb:10.6.4-focal```
 
-Now lets run a container and note how we use environment variables.  
+Now let's run a container and note how we use environment variables.  
 
 - using `-e` we specify a key=value pair
 - it's convention for NAMES to be in caps
 - in this case we create `MYSQL_ROOT_PASSWORD`, `MYSQL_PASSWORD`, `MYSQL_DATABASE` and `MYSQL_USER`
-- The container is configured to accept these varibales and take action on them
+- The container is configured to accept these variables and take action on them
 - `MYSQL_ROOT_PASSWORD` sets the mariaDB root password
 - `MYSQL_DATABASE` creates a database with the name of the env variable value `wordpress` in this example
 - `MYSQL_USER` creates a mariaDB user
 - `MYSQL_PASSWORD` creates a password for that user
-- `--default-authentication-plugin=mysql_native_password` is an argument for the process running int he docker container, extra options. 
+- `--default-authentication-plugin=mysql_native_password` is an argument for the process running in the docker container, extra options. 
   
 ```docker run --name db -e MYSQL_ROOT_PASSWORD=somewordpress -e MYSQL_PASSWORD=wordpress -e MYSQL_DATABASE=wordpress -e MYSQL_USER=wordpress -d mariadb:10.6.4-focal --default-authentication-plugin=mysql_native_password```
 
