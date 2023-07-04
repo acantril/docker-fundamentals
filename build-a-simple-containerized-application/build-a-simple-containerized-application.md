@@ -7,6 +7,8 @@ Locate the `build-a-simple-containerized-application` folder in the course repo.
 
 # Application 1 - 2048
 
+![2048-diagram](files/2048-game.png)
+*Diagram shows the flow -  from the Dockerfile to the fun playing game*
 ## Creating a 2048 Docker Image
 
 Move into the `app1-2048` folder.  
