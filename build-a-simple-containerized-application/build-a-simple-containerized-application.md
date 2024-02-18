@@ -11,7 +11,9 @@ Locate the `build-a-simple-containerized-application` folder in the course repos
 
 ## Creating a 2048 Docker Image
 
-Move into the `app1-2048` folder. Open the `Dockerfile` in a text editor of your choice. Notice how it contains `5` lines: `FROM`, `LABEL`, `COPY`, `EXPOSE`, and `CMD`. When you build the Docker image in the next step, pay attention to how many layers are created.
+- Move into the `app1-2048` folder.
+- Open the `Dockerfile` in a text editor of your choice.
+- Notice how it contains `5` lines: `FROM`, `LABEL`, `COPY`, `EXPOSE`, and `CMD`. When you build the Docker image in the next step, pay attention to how many layers are created.
 
 This Dockerfile uses the latest version of the `nginx` image (which includes a pre-configured installation of NGINX).
 
