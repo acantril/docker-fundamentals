@@ -62,7 +62,8 @@ This Dockerfile is intentionally less efficient than app1 above. I want you to u
 
 ## Creating a Container of Cats Docker Image
 
-Move into the `app2-containerofcats` folder. Open the `Dockerfile` in a text editor of your choice.
+- Move into the `app2-containerofcats` folder.
+- Open the `Dockerfile` in a text editor of your choice.
 
 Let's review this `Dockerfile` and specifically identify how it's different from the previous `app1`.
 
