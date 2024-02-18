@@ -62,13 +62,13 @@ You are now accessing the DB container from the phpMyAdmin container.
 
 Now we're going to explore the container.
 
-Run a ```docker exec -it db bash``` to go into the container via a bash shell.
-Run a ```df -k``` and note how there are no externally mapped drives/mounts. All storage that this container uses is within this container.
+Run a `docker exec -it db bash` to go into the container via a bash shell.
+Run a `df -k` and note how there are no externally mapped drives/mounts. All storage that this container uses is within this container.
 This means the storage is linked to the lifecycle of this container; if the container is deleted, so is the storage.
 
 The MariaDB service stores its data in `/var/lib/mysql`, so let's check that out.
-Run a ```cd /var/lib/mysql``` and then ```ls -la```.
-This directory contains the data for the database service inside the container.
+Run a `cd /var/lib/mysql` and then `ls -la`.
+This directory contains the `data` for the database service inside the container.
 
 This is a limitation we're going to fix in the next demo, where we will look at configuring separate storage for our container.
 
