@@ -1,55 +1,60 @@
-# Prep
+# Preparation
 
-Make sure you have done the previous demo lesson on environment variables and understand all parts of that demo.  
-Recreate the `phpmyadmin` container via the command below
+Ensure you have completed the previous demonstration lesson on environment variables and understand all aspects of that demonstration. Recreate the `phpmyadmin` container with the following command:
 
-```docker run --name phpmyadmin -d -p 8081:80 -e PMA_ARBITRARY=1 phpmyadmin/phpmyadmin```
+```sh
+docker run --name phpmyadmin -d -p 8081:80 -e PMA_ARBITRARY=1 phpmyadmin/phpmyadmin
+```
 
 # Bind Mounts
 
-Bind mounts allow us to mount a file or directory on the host machine into a container. This has pros and cons but it can be useful if you need to see this files on the container host, or access a shared collection of files between container, or between containers and other compute services.  
+Bind mounts allow us to mount a file or directory from the host machine into a container. This approach has both advantages and disadvantages, but it can be particularly useful if you need to access files on the container host, share files between containers, or between containers and other compute services.
 
-In this example, we're going to create a bind mount for the mariaDB data folder in the container, and map it to a folder on the docker host.  
+In this example, we will create a bind mount for the MariaDB data directory within the container and map it to a directory on the Docker host.
 
-we can do this is two ways, using the `-v` option or the `--mount` option. They both do the same thing, but they look different.
+There are two ways to achieve this: using the `-v` option or the `--mount` option. Both options accomplish the same task but are formatted differently.
 
-As a reminder, in the environment variables demo lesson, we created a mariaDB container using this command:-
+As a reminder, in the environment variables demonstration lesson, we created a MariaDB container using the following command:
 
-```docker run --name db -e MYSQL_ROOT_PASSWORD=somewordpress -e MYSQL_PASSWORD=wordpress -e MYSQL_DATABASE=wordpress -e MYSQL_USER=wordpress -d mariadb:10.6.4-focal --default-authentication-plugin=mysql_native_password```
+```sh
+docker run --name db -e MYSQL_ROOT_PASSWORD=somewordpress -e MYSQL_DATABASE=wordpress -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=wordpress -d mariadb:10.6.4-focal --default-authentication-plugin=mysql_native_password
+```
 
-and the mariaDB data was stored in the container in the `/var/lib/mysql` folder.  
+The MariaDB data was stored within the container in the `/var/lib/mysql` directory.
 
-first, on your local machine/docker host we will create a folder for the mariaDB data, and we will call it `mariadb_data`. 
+First, on your local machine/Docker host, create a directory for the MariaDB data, and name it `mariadb_data`.
 
-- move into a folder where you are ok creating files and folders, either your home folder or a tmp folder.  
-- I'll assume your home folder
-- windows `cd %HOMEDRIVE%` macos/Linux `cd ~`
-- create a folder called `mariadb_data`
-- `mkdir mariadb_data`
+- Navigate to a directory where you are comfortable creating files and directories, such as your home directory or a temporary directory.
+- For simplicity, let's assume you're using your home directory.
+- On Windows, navigate with `cd %HOMEDRIVE%`. On macOS/Linux, use `cd ~`.
+- Create a directory called `mariadb_data` with `mkdir mariadb_data`.
 
 ### macOS / Linux
-*both of these do the same thing, pick one*
 
-```
+*Choose one of the following commands, as both perform the same action:*
+
+```sh
 docker run \
  --name db \
  -e MYSQL_ROOT_PASSWORD=somewordpress \
- -e MYSQL_PASSWORD=wordpress \
  -e MYSQL_DATABASE=wordpress \
  -e MYSQL_USER=wordpress \
+ -e MYSQL_PASSWORD=wordpress \
  --mount type=bind,source="$(pwd)"/mariadb_data,target=/var/lib/mysql \
  -d \
  mariadb:10.6.4-focal \
  --default-authentication-plugin=mysql_native_password
 ```
-*both of these do the same thing, pick one*
-```
+
+*Or:*
+
+```sh
 docker run \
  --name db \
  -e MYSQL_ROOT_PASSWORD=somewordpress \
- -e MYSQL_PASSWORD=wordpress \
  -e MYSQL_DATABASE=wordpress \
  -e MYSQL_USER=wordpress \
+ -e MYSQL_PASSWORD=wordpress \
  -v "$(pwd)"/mariadb_data:/var/lib/mysql \
  -d \
  mariadb:10.6.4-focal \
@@ -57,85 +62,74 @@ docker run \
 ```
 
 ### Windows
-*both of these do the same thing, pick one*
-*bind mounts often requires specific configuration on windows docker hosts*
-*it's often tricky to get it working*
 
-```docker run --name db -e MYSQL_ROOT_PASSWORD=somewordpress -e MYSQL_PASSWORD=wordpress -e MYSQL_DATABASE=wordpress -e MYSQL_USER=wordpress --mount type=bind,source=%cd%/mariadb_data,target=/var/lib/mysql -d mariadb:10.6.4-focal --default-authentication-plugin=mysql_native_password```
+*Choose one of the following commands, noting that bind mounts often require specific configuration on Windows Docker hosts and can be challenging to set up:*
 
-```docker run --name db -e MYSQL_ROOT_PASSWORD=somewordpress -e MYSQL_PASSWORD=wordpress -e MYSQL_DATABASE=wordpress -e MYSQL_USER=wordpress -v %cd%/mariadb_data:/var/lib/mysql -d mariadb:10.6.4-focal --default-authentication-plugin=mysql_native_password```
+```sh
+docker run --name db -e MYSQL_ROOT_PASSWORD=somewordpress -e MYSQL_DATABASE=wordpress -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=wordpress --mount type=bind,source=%cd%/mariadb_data,target=/var/lib/mysql -d mariadb:10.6.4-focal --default-authentication-plugin=mysql_native_password
+```
 
+*Or:*
+
+```sh
+docker run --name db -e MYSQL_ROOT_PASSWORD=somewordpress -e MYSQL_DATABASE=wordpress -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=wordpress -v %cd%/mariadb_data:/var/lib/mysql -d mariadb:10.6.4-focal --default-authentication-plugin=mysql_native_password
+```
 
 ### macOS / Linux & Windows
 
-In all of the above cases, move into the `mariadb_data` folder and do a listing..  
-You should be able to see all the files and folders created by the bind mount into the container. Any data stored in the `/var/lib/mysql` folder in the folder, is stored in this folder on the host. Any changes made to the `/var/lib/mysql` in the container will be reflected in this folder. Any changes made to this folder, will be reflected in the `/var/lib/mysql` folder in the container.  
+In all the above cases, navigate into the `mariadb_data` directory and list its contents. You should see all files and directories created by the bind mount. Any data stored in `/var/lib/mysql` within the container is also stored in this directory on the host. Changes made in one location are reflected in the other.
 
 # Volumes
 
-Volumes are the prefered way to adding storage to docker containers outside of the lifecycle of a container. They are managed entirely by docker and work flawlessly on windows container hosts.  
+Volumes are the preferred method of adding storage to Docker containers outside of a container's lifecycle. Managed entirely by Docker, volumes work seamlessly on Windows container hosts.
 
-to create a volume run
+To create a volume, run:
 
-```docker volume create mariadb_data```
-you can list any volumes via the ```docker volume ls``` command.  
-you can review full metadata for a volume via the ```docker volume inspect mariadb_data``` command.   
-you can delete a volume via the ```docker volume rm mariadb_data``` command.   
-and verify it's been removed via the ```docker volume ls``` command.  
-
-if you run a container and specify a volume which doesn't already exist, it will create this volume for you.   
-
-*both of these do the same thing, pick one*
-
+```sh
+docker volume create mariadb_data
 ```
+
+List volumes with `docker volume ls`, inspect a volume with `docker volume inspect mariadb_data`, and delete a volume with `docker volume rm mariadb_data`. Verify removal with `docker volume ls`.
+
+If you start a container and specify a non-existing volume, Docker will automatically create it for you.
+
+*Choose one of the following commands, as both achieve the same result:*
+
+```sh
 docker run \
  --name db \
  -e MYSQL_ROOT_PASSWORD=somewordpress \
- -e MYSQL_PASSWORD=wordpress \
  -e MYSQL_DATABASE=wordpress \
  -e MYSQL_USER=wordpress \
+ -e MYSQL_PASSWORD=wordpress \
  --mount source=mariadb_data,target=/var/lib/mysql \
  -d \
  mariadb:10.6.4-focal \
  --default-authentication-plugin=mysql_native_password
 ```
 
-```
+*Or:*
+
+```sh
 docker run \
  --name db \
  -e MYSQL_ROOT_PASSWORD=somewordpress \
- -e MYSQL_PASSWORD=wordpress \
  -e MYSQL_DATABASE=wordpress \
  -e MYSQL_USER=wordpress \
+ -e MYSQL_PASSWORD=wordpress \
  -v mariadb_data:/var/lib/mysql \
  -d \
  mariadb:10.6.4-focal \
  --default-authentication-plugin=mysql_native_password
 ```
 
-notice via ```docker volume ls``` how this has automatically created a volume.  if we stop the container with ```docker stop db``` and then delete it with ```docker rm db``` notice how the volume still exists ```docker volume ls``` ?
-
-if we start up the container again, we can use the same volume and any data stored within it persists, so data can live on beyond the lifecycle of the container.  
-
-```
-docker run \
- --name db \
- -e MYSQL_ROOT_PASSWORD=somewordpress \
- -e MYSQL_PASSWORD=wordpress \
- -e MYSQL_DATABASE=wordpress \
- -e MYSQL_USER=wordpress \
- -v mariadb_data:/var/lib/mysql \
- -d \
- mariadb:10.6.4-focal \
- --default-authentication-plugin=mysql_native_password
-```
-
-get the internal container ip via ```docker inspect db``` and then browse to https://localhost:8081 and login with that ip, `root` and `somewordpress`, notice how it works fine ?   
-
+Note how `docker volume ls` shows the newly created volume. Stopping the container with `docker stop db` and deleting it with `docker rm db` leaves the volume intact. Data within the volume persists beyond the container's lifecycle, allowing reuse in new containers.
 
 # Cleanup
 
-```
+To clean up, run the following commands:
+
+```sh
 docker stop db
 docker rm db
 docker stop phpmyadmin
@@ -143,5 +137,4 @@ docker rm phpmyadmin
 docker volume rm mariadb_data
 ```
 
-
-
+This ensures all containers and the volume are properly removed.
