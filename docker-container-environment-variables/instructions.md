@@ -34,7 +34,7 @@ Now, let's run a container and note how we use environment variables:
 - `--default-authentication-plugin=mysql_native_password` is an argument for the process running in the Docker container, adding extra options.
 
 ```sh
-docker run --name db -e MYSQL_ROOT_PASSWORD=somewordpress -e MYSQL_PASSWORD=wordpress -e MYSQL_DATABASE=wordpress -e MYSQL_USER=wordpress -d mariadb:10.6.4-focal --default-authentication-plugin=mysql_native_password
+docker run --name db -e MYSQL_ROOT_PASSWORD=somewordpress -e MYSQL_DATABASE=wordpress -e MYSQL_USER=wordpress -e MYSQL_PASSWORD=wordpress -d mariadb:10.6.4-focal --default-authentication-plugin=mysql_native_password
 ```
 
 Confirm the Docker container is running with:
@@ -42,10 +42,10 @@ Confirm the Docker container is running with:
 docker ps -a
 ```
 
-And get the container ID... note this down as `MARIADB_ID`.
 Run the command below to show the metadata for the running container for MariaDB.
 ```sh
-docker inspect MARIADB_ID
+MARIA_DB_CONTAINER_ID=$(docker ps | grep mariadb | awk '{print $1}')
+docker inspect ${MARIA_DB_CONTAINER_ID}
 ```
 
 Look for `"IPAddress": "XXXXXXXXXX"`, this is the internal Docker network IP that the DB container is running on. Note this down as `DB_IP`.
